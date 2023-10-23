@@ -1,0 +1,121 @@
+#ddev-generated
+
+http:
+  routers:
+    
+    
+    pokemon-list-phpmyadmin-80-http:
+      
+      rule: HostRegexp(`pokemon-list.ddev.site`, `api.pokemon-list.ddev.site`)
+      
+      service: "pokemon-list-phpmyadmin-80-http"
+      tls: false
+      entrypoints:
+        - http-8036
+    
+    
+    
+    pokemon-list-web-80-http:
+      
+      rule: HostRegexp(`pokemon-list.ddev.site`, `api.pokemon-list.ddev.site`)
+      
+      service: "pokemon-list-web-80-http"
+      tls: false
+      entrypoints:
+        - http-80
+    
+    
+    pokemon-list-web-8025-http:
+      
+      rule: HostRegexp(`pokemon-list.ddev.site`, `api.pokemon-list.ddev.site`)
+      
+      service: "pokemon-list-web-8025-http"
+      tls: false
+      entrypoints:
+        - http-8025
+    
+    
+    
+    
+    
+    pokemon-list-phpmyadmin-80-https:
+      
+      rule: HostRegexp(`pokemon-list.ddev.site`, `api.pokemon-list.ddev.site`)
+      
+      service: "pokemon-list-phpmyadmin-80-https"
+      
+      tls: true
+      
+      entrypoints:
+        - http-8037
+    
+    
+    
+    
+    pokemon-list-web-80-https:
+      
+      rule: HostRegexp(`pokemon-list.ddev.site`, `api.pokemon-list.ddev.site`)
+      
+      service: "pokemon-list-web-80-https"
+      
+      tls: true
+      
+      entrypoints:
+        - http-443
+    
+    
+    pokemon-list-web-8025-https:
+      
+      rule: HostRegexp(`pokemon-list.ddev.site`, `api.pokemon-list.ddev.site`)
+      
+      service: "pokemon-list-web-8025-https"
+      
+      tls: true
+      
+      entrypoints:
+        - http-8026
+    
+    
+
+  services:
+    
+    pokemon-list-phpmyadmin-80-http:
+      loadbalancer:
+        servers:
+          - url: http://ddev-pokemon-list-phpmyadmin:80
+    
+    pokemon-list-phpmyadmin-80-https:
+    
+      loadbalancer:
+        servers:
+          - url: http://ddev-pokemon-list-phpmyadmin:80
+    
+    pokemon-list-web-80-http:
+      loadbalancer:
+        servers:
+          - url: http://ddev-pokemon-list-web:80
+    
+    pokemon-list-web-8025-http:
+      loadbalancer:
+        servers:
+          - url: http://ddev-pokemon-list-web:8025
+    
+    pokemon-list-web-80-https:
+    
+      loadbalancer:
+        servers:
+          - url: http://ddev-pokemon-list-web:80
+    
+    pokemon-list-web-8025-https:
+    
+      loadbalancer:
+        servers:
+          - url: http://ddev-pokemon-list-web:8025
+    
+
+
+tls:
+  certificates:
+    - certFile: /mnt/ddev-global-cache/traefik/certs/pokemon-list.crt
+      keyFile: /mnt/ddev-global-cache/traefik/certs/pokemon-list.key
+

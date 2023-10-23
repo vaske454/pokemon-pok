@@ -1,0 +1,50 @@
+#!/bin/bash
+
+## Description: Setup the project
+## Usage: setup
+## Example: "ddev setup"
+
+set -e
+
+project_name=$(basename $PWD)
+
+if [ -f .ddev/config.yaml ]; then
+  sed -i 's/^additional_hostnames: \[\]$/additional_hostnames:\n - api.'"$project_name"'/' .ddev/config.yaml
+fi
+
+# Step 1: Start DDEV
+echo "Step 1: Starting DDEV"
+ddev start
+
+# Step 2: Install all required Composer dependencies
+echo "Step 2: Installing all required Composer dependencies"
+ddev composer install
+
+# Step 3: Generate a key for your application
+echo "Step 3: Generating a key for your application"
+ddev exec "cd backend && php artisan key:generate"
+
+if [ -f .env ]; then
+  sed -i 's|APP_URL=.*|APP_URL="http://api.'"$project_name"'"|' .env
+fi
+
+# Step 4: Execute Laravel migrations to create the database
+echo "Step 4: Executing Laravel migrations to create the database"
+ddev exec "cd backend && php artisan migrate"
+
+# Step 5: Import Pokémon data
+echo "Step 5: Importing Pokémon data"
+ddev exec "cd backend && php artisan app:import-pokemon-data"
+
+# Install NPM dependencies
+echo "Step 6: Installing NPM dependencies"
+cd frontend
+npm install
+
+# Create .env.local in the frontend directory
+echo "Step 7: Creating .env.local in the frontend directory"
+echo "NEXT_PUBLIC_BACKEND_URL=http://api.$project_name.ddev.site" > .env.local
+
+npm run build
+
+npm run dev
